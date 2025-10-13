@@ -5,6 +5,8 @@ services:
     environment:
       ACCEPT_EULA: "Y" # ต้องยอมรับ EULA
       SA_PASSWORD: "${DB_PASSWORD}" # ใช้รหัสผ่านจาก .env
+      MSSQL_PID: "Express"
+      MSSQL_TLS_MIN_PROTOCOL_VERSION: "1.0"
     ports:
       - "1433:1433" # Port มาตรฐานของ SQL Server
     volumes:
@@ -14,6 +16,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+      start_period: 60s
 
   # โปรไฟล์ dev: ให้เพื่อนแก้ UI แล้วเห็นผลทันที
   app-dev:

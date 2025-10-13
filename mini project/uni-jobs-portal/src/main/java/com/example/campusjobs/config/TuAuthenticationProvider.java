@@ -21,6 +21,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.campusjobs.model.User;
+import com.example.campusjobs.service.UserService;
+
 @Component
 public class TuAuthenticationProvider implements AuthenticationProvider {
 
@@ -28,62 +31,69 @@ public class TuAuthenticationProvider implements AuthenticationProvider {
 
     @Value("${tu.api.url:https://restapi.tu.ac.th/api/v1/auth/Ad/verify}")
     private String tuApiUrl;
-
-    @Value("${tu.api.key}")  // ใช้ api-key ใน application.properties
+    @Value("${tu.api.key}")
     private String apiKey;
 
-    @Override
-public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-    String username = authentication.getName();
-    String password = authentication.getCredentials().toString();
+    private final UserService userService; // <-- Inject UserService
 
-    RestTemplate restTemplate = new RestTemplate();
-    Map<String, String> requestBody = new HashMap<>();
-    requestBody.put("UserName", username);
-    requestBody.put("PassWord", password);
-
-    HttpHeaders headers = new HttpHeaders();
-    headers.set("Application-Key", apiKey);
-    headers.setContentType(MediaType.APPLICATION_JSON);
-
-    HttpEntity<Map<String, String>> request = new HttpEntity<>(requestBody, headers);
-
-    try {
-        ResponseEntity<Map> response = restTemplate.postForEntity(tuApiUrl, request, Map.class);
-
-        log.info("TU API Response Status: {}", response.getStatusCode());
-        log.info("TU API Response Body: {}", response.getBody());
-
-        // --- [แก้ไข] ส่วนตรวจสอบเงื่อนไขที่ปลอดภัยและถูกต้อง ---
-        boolean isAuthenticated = false;
-        if (response.getBody() != null) {
-            Object statusObject = response.getBody().get("status");
-            // แปลงเป็น String แล้วค่อยเทียบ จะรองรับทั้ง Boolean true และ String "true"
-            isAuthenticated = statusObject != null && statusObject.toString().equalsIgnoreCase("true");
-        }
-
-        if (response.getStatusCode() == HttpStatus.OK && isAuthenticated) {
-            String type = (String) response.getBody().get("type");
-            if (type == null) {
-                // ถ้า API ไม่ส่ง type มาให้ ให้โยน error ที่ชัดเจน
-                log.error("TU API response is successful but 'type' field is missing.");
-                throw new BadCredentialsException("User type not found in API response");
-            }
-            String role = type.equalsIgnoreCase("student") ? "ROLE_STUDENT" : "ROLE_TEACHER";
-
-            return new UsernamePasswordAuthenticationToken(username, password,
-                    List.of(new SimpleGrantedAuthority(role)));
-        } else {
-            log.warn("Authentication failed. API response indicates failure or status key is missing/false.");
-            throw new BadCredentialsException("Invalid TU credentials");
-        }
-        // ---------------------------------------------------------
-
-    } catch (Exception e) {
-        log.error("Exception while calling TU API", e);
-        throw new BadCredentialsException("Cannot verify TU credentials", e);
+    public TuAuthenticationProvider(UserService userService) { // <-- แก้ไข Constructor
+        this.userService = userService;
     }
-}
+
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        String username = authentication.getName();
+        String password = authentication.getCredentials().toString();
+
+        RestTemplate restTemplate = new RestTemplate();
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("UserName", username);
+        requestBody.put("PassWord", password);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Application-Key", apiKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, String>> request = new HttpEntity<>(requestBody, headers);
+
+        try {
+            ResponseEntity<Map> response = restTemplate.postForEntity(tuApiUrl, request, Map.class);
+            log.info("TU API Response Status: {}", response.getStatusCode());
+            log.info("TU API Response Body: {}", response.getBody());
+
+            boolean isAuthenticated = false;
+            if (response.getBody() != null) {
+                Object statusObject = response.getBody().get("status");
+                isAuthenticated = statusObject != null && statusObject.toString().equalsIgnoreCase("true");
+            }
+
+            if (response.getStatusCode() == HttpStatus.OK && isAuthenticated) {
+                // --- ส่วนที่แก้ไข ---
+                // 1. เรียก Service เพื่อหาหรือสร้าง User ใน DB ของเรา
+                User user = userService.findOrCreateUser(response.getBody());
+
+                // 2. สร้าง Authorities จาก Role ใน DB ของเรา
+                var authorities = List.of(new SimpleGrantedAuthority(user.getRole()));
+
+                // 3. สร้าง CustomUserDetails จากข้อมูลใน DB ของเรา
+                CustomUserDetails userDetails = new CustomUserDetails(
+                    user.getUsername(),
+                    user.getDisplayNameTh(),
+                    user.getEmail(),
+                    authorities
+                );
+                
+                // 4. สร้าง Token สุดท้ายโดยใช้ userDetails ทั้งก้อน
+                return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                // --- จบส่วนที่แก้ไข ---
+            } else {
+                log.warn("Authentication failed. API response indicates failure.");
+                throw new BadCredentialsException("Invalid TU credentials");
+            }
+        } catch (Exception e) {
+            log.error("Exception while calling TU API", e);
+            throw new BadCredentialsException("Cannot verify TU credentials", e);
+        }
+    }
 
     @Override
     public boolean supports(Class<?> authentication) {
