@@ -48,9 +48,9 @@
 </dependency>
 <!--  Database  -->
 <dependency>
-<groupId>org.postgresql</groupId>
-<artifactId>postgresql</artifactId>
-<scope>runtime</scope>
+    <groupId>com.microsoft.sqlserver</groupId>
+    <artifactId>mssql-jdbc</artifactId>
+    <scope>runtime</scope>
 </dependency>
 <!--  (ถ้าใช้ Lombok ก็เปิดคู่นี้ได้)
     <dependency>
