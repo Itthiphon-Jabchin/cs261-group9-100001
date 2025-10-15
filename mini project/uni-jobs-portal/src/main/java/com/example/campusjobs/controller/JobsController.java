@@ -35,27 +35,37 @@ public class JobsController {
     }
 
     @PostMapping("/{id}/apply")
-    public String apply(@PathVariable Long id,
-                        @RequestParam @NotBlank String fullName,
-                        @RequestParam @NotBlank String studentId,
-                        @RequestParam @NotBlank String email,
-                        @RequestParam @NotBlank String phone,
-                        @RequestParam @NotBlank String answerText,
-                        RedirectAttributes ra) {
+public String apply(@PathVariable Long id,
+                    @RequestParam @NotBlank String fullName,
+                    @RequestParam @NotBlank String studentId,
+                    @RequestParam @NotBlank String email,
+                    @RequestParam @NotBlank String phone,
+                    @RequestParam @NotBlank String answerText,
+                    RedirectAttributes ra) {
 
-        var job = jobRepository.findById(id).orElse(null);
-        if (job == null) {
-            ra.addFlashAttribute("err", "ไม่พบบันทึกงาน");
-            return "redirect:/";
-        }
-        String me = SecUtil.currentUsername();
-        if (applicationRepository.existsByJobIdAndApplicantUsername(id, me)) {
-            ra.addFlashAttribute("err", "คุณสมัครงานนี้แล้ว");
-            return "redirect:/jobs/" + id;
-        }
-        var app = new Application(job, me, fullName, studentId, email, phone, answerText);
-        applicationRepository.save(app);
-        ra.addFlashAttribute("msg", "สมัครเรียบร้อย");
+    var job = jobRepository.findById(id).orElse(null);
+    if (job == null) {
+        ra.addFlashAttribute("err", "ไม่พบบันทึกงาน");
+        return "redirect:/";
+    }
+
+    String me = SecUtil.currentUsername();
+
+    // 🛡️ ห้าม Teacher สมัครงาน (ตรวจจาก username)
+    if (me != null && me.toLowerCase().contains("teacher")) {
+        ra.addFlashAttribute("err", "Teacher ไม่สามารถสมัครงานได้");
         return "redirect:/jobs/" + id;
     }
+
+    if (applicationRepository.existsByJobIdAndApplicantUsername(id, me)) {
+        ra.addFlashAttribute("err", "คุณสมัครงานนี้แล้ว");
+        return "redirect:/jobs/" + id;
+    }
+
+    var app = new Application(job, me, fullName, studentId, email, phone, answerText);
+    applicationRepository.save(app);
+    ra.addFlashAttribute("msg", "สมัครเรียบร้อย");
+    return "redirect:/jobs/" + id;
+}
+
 }
