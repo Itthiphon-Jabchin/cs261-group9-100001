@@ -1,22 +1,56 @@
 <!DOCTYPE html>
-<html lang="th"><head><meta charset="UTF-8"><title>สร้างงานใหม่</title></head>
+<html lang="th"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>สร้างงานใหม่</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
 <body>
-  <h2>สร้างงานใหม่</h2>
-  <form method="post" action="/teacher/jobs" th:object="${_csrf}">
-    <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
-    <div>
-      <label>ชื่อเรื่อง</label><br/>
-      <input type="text" name="title" required style="width:420px"/>
+  <div class="navbar">
+    <div class="logo">VolenteeU</div>
+    <div class="nav-links">
+      <a href="/" style="font-weight: bold;">Home</a>
+      <a href="/teacher/jobs" class="active">พื้นที่อาจารย์</a>
+      <a href="/profile">Profile</a>
+      <form method="post" action="/logout" th:action="@{/logout}" style="display:inline; margin-left:20px;">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+        <button type="submit" style="background:none;border:none;color:#A3062C;cursor:pointer;">Logout</button>
+      </form>
     </div>
-    <div>
-      <label>รายละเอียด</label><br/>
-      <textarea name="description" required style="width:420px;height:120px"></textarea>
-    </div>
-    <div>
-      <label>คำถามให้นักศึกษาตอบ</label><br/>
-      <textarea name="questionPrompt" required style="width:420px;height:80px"></textarea>
-    </div>
-    <button type="submit">บันทึก</button>
-  </form>
-  <p><a href="/teacher/jobs">ย้อนกลับ</a></p>
-</body></html>
+  </div>
+
+  <div class="main-content">
+    <h2>สร้างงานใหม่</h2>
+
+    <form method="post" th:action="@{/teacher/jobs}">
+      <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+
+      <div>
+        <label>ชื่อเรื่อง</label><br/>
+        <input type="text" name="title" required style="width:420px"/>
+      </div>
+
+      <div>
+        <label>รายละเอียด</label><br/>
+        <textarea name="description" required style="width:420px;height:120px"></textarea>
+      </div>
+
+      <div>
+        <label>คำถามให้นักศึกษาตอบ</label><br/>
+        <textarea name="questionPrompt" required style="width:420px;height:80px"></textarea>
+      </div>
+
+      <button type="submit">บันทึก</button>
+    </form>
+
+    <p><a href="/teacher/jobs">ย้อนกลับ</a></p>
+  </div>
+
+  <div class="footer">
+    © 2025 VolenteeU — Software Project Recruitment
+  </div>
+</body>
+</html>
