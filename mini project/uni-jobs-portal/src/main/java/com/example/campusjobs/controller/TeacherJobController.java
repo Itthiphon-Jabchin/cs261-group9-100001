@@ -37,9 +37,9 @@ public class TeacherJobController {
     public String newJobForm() { return "teacher_job_new"; }
 
     @PostMapping("/jobs")
-    public String createJob(@RequestParam @NotBlank String title,
-                            @RequestParam @NotBlank String description,
-                            @RequestParam @NotBlank String questionPrompt,
+    public String createJob(@RequestParam("title") @NotBlank String title,
+                            @RequestParam("description") @NotBlank String description,
+                            @RequestParam("questionPrompt") @NotBlank String questionPrompt,
                             RedirectAttributes ra) {
         String me = SecUtil.currentUsername();
         Job job = new Job(title, description, me, questionPrompt);
@@ -49,7 +49,7 @@ public class TeacherJobController {
     }
 
     @GetMapping("/jobs/{id}/applications")
-    public String viewApplications(@PathVariable Long id, Model model, RedirectAttributes ra) {
+    public String viewApplications(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
         Optional<Job> jobOpt = jobRepository.findById(id);
         if (jobOpt.isEmpty() || !jobOpt.get().getCreatorUsername().equals(SecUtil.currentUsername())) {
             ra.addFlashAttribute("err", "ไม่มีสิทธิ์เข้าถึงงานนี้");
@@ -61,12 +61,12 @@ public class TeacherJobController {
     }
 
     @PostMapping("/applications/{appId}/approve")
-    public String approve(@PathVariable Long appId, RedirectAttributes ra) {
+    public String approve(@PathVariable("appId") Long appId, RedirectAttributes ra) {
         return updateStatus(appId, ApplicationStatus.APPROVED, ra);
     }
 
     @PostMapping("/applications/{appId}/reject")
-    public String reject(@PathVariable Long appId, RedirectAttributes ra) {
+    public String reject(@PathVariable("appId") Long appId, RedirectAttributes ra) {
         return updateStatus(appId, ApplicationStatus.REJECTED, ra);
     }
 
