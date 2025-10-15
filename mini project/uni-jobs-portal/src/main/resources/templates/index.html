@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="th" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<html lang="th"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <title>Thammasat Event</title>
@@ -58,7 +61,19 @@
                     <div class="job-details">
                         <h3 th:text="${job.title}">ชื่อกิจกรรมตัวอย่าง</h3>
                         <p th:text="${job.description}">รายละเอียดกิจกรรมสั้นๆ</p>
-                        <a th:href="@{|/jobs/${job.id}|}" class="apply-btn">Apply Now</a>
+
+                        <!-- ✅ Logic เดิม: เห็นปุ่มทุกคน แต่ anonymous กดแล้วไป /login -->
+                        <th:block sec:authorize="isAnonymous()">
+                            <a th:href="@{/login}" class="apply-btn">Apply Now</a>
+                        </th:block>
+
+                        <th:block sec:authorize="hasRole('STUDENT')">
+                            <a th:href="@{|/jobs/${job.id}|}" class="apply-btn">Apply Now</a>
+                        </th:block>
+
+                        <th:block sec:authorize="hasRole('TEACHER')">
+                            <!-- teacher: hide apply button -->
+                        </th:block>
                     </div>
 
                     <img class="job-image" th:src="@{/images/default-event.png}" alt="Event Banner" />
