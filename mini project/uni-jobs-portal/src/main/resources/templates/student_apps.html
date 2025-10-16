@@ -3,7 +3,6 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-
 <head>
     <meta charset="UTF-8">
     <title>ใบสมัครของฉัน</title>
@@ -51,18 +50,43 @@
 
             <div class="application-list" th:if="${apps != null and !apps.isEmpty()}">
                 <div class="application-card" th:each="a : ${apps}">
+                    <!-- หัวเรื่อง + วันที่ (ชิดซ้ายสุด) -->
                     <div class="application-details">
                         <div class="job-title" th:text="${a.job.title}"></div>
                         <p class="application-date"
-                            th:text="${'Applied on: ' + #temporals.format(a.appliedAt, 'MMM dd, yyyy')}">
-                        </p>
+                           th:text="${'Applied on: ' + #temporals.format(a.appliedAt, 'MMM dd, yyyy')}"></p>
                     </div>
+
+                    <!-- สถานะ/ปุ่ม -->
                     <div class="status-container">
                         <span class="status-badge" th:text="${a.status}"
-                            th:classappend="'status-' + ${#strings.toLowerCase(a.status)}">
-                            Status
-                        </span>
+                              th:classappend="'status-' + ${#strings.toLowerCase(a.status)}">Status</span>
                         <a href="#" class="view-link">view</a>
+                    </div>
+
+                    <!-- รายละเอียด -->
+                    <div class="application-extra">
+                        <div class="job-details">
+                            <p><b>Description:</b></p>
+                            <p th:text="${a.job.description}"></p>
+                            <hr>
+
+                            <!-- Progress -->
+                            <div class="status-progress">
+                                <div class="step" th:classappend="${a.status == 'PENDING'} ? 'active' : ''">
+                                    <div class="circle">⏳</div>
+                                    Pending
+                                </div>
+                                <div class="step" th:classappend="${a.status == 'ACCEPTED'} ? 'active' : ''">
+                                    <div class="circle">✅</div>
+                                    Accepted
+                                </div>
+                                <div class="step" th:classappend="${a.status == 'REJECTED'} ? 'active' : ''">
+                                    <div class="circle">❌</div>
+                                    Rejected
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -77,6 +101,20 @@
         © 2025 VolenteeU — Software Project Recruitment
     </div>
 
+    <script>
+      // toggle view/hide
+      document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".view-link").forEach(function(link) {
+          link.addEventListener("click", function(e) {
+            e.preventDefault();
+            const card  = e.target.closest(".application-card");
+            const extra = card.querySelector(".application-extra");
+            const shown = extra.style.display === "block";
+            extra.style.display = shown ? "none" : "block";
+            e.target.textContent = shown ? "view" : "hide";
+          });
+        });
+      });
+    </script>
 </body>
-
 </html>
