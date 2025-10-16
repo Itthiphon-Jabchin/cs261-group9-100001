@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="th"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <!-- ✅ Navbar (เหมือนทุกหน้า) -->
+    <div class="navbar">
+        <div class="logo">VolenteeU</div>
+        <div class="nav-links">
+            <a href="/" style="font-weight: bold;">Home</a>
+
+            <th:block sec:authorize="hasRole('STUDENT')">
+                <a th:href="@{/student/applications}">ใบสมัครของฉัน</a>
+            </th:block>
+
+            <th:block sec:authorize="hasRole('TEACHER')">
+                <a th:href="@{/teacher/jobs}">พื้นที่อาจารย์</a>
+            </th:block>
+
+            <th:block sec:authorize="isAuthenticated()">
+                <a th:href="@{/profile}" class="active">Profile</a>
+                <form method="post" action="/logout" th:object="${_csrf}" style="display:inline; margin-left:25px;">
+                    <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
+                    <button type="submit"
+                            style="background:none; border:none; color:#A3062C; cursor:pointer;">Logout</button>
+                </form>
+            </th:block>
+
+            <th:block sec:authorize="isAnonymous()">
+                <a href="/login">Login</a>
+            </th:block>
+        </div>
+    </div>
+
+    <!-- ✅ เนื้อหาหลัก -->
+    <div class="main-content container" style="text-align:center; margin-top:80px;">
+        <h1>ข้อมูลส่วนตัว</h1>
+        <p>หน้านี้จะแสดงข้อมูลโปรไฟล์ของผู้ใช้ เช่นชื่อ อีเมล หรือบทบาท (Role)</p>
+    </div>
+
+    <!-- ✅ Footer -->
+    <div class="footer">
+        © 2025 VolenteeU — Software Project Recruitment
+    </div>
+</body>
+</html>
