@@ -18,7 +18,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/jobs", "/jobs/*").permitAll()
+                // ✅ เปลี่ยน /images/** -> /image/** ให้ตรงกับโฟลเดอร์ static/image
+                .requestMatchers("/", "/css/**", "/js/**", "/image/**", "/jobs", "/jobs/*").permitAll()
                 .requestMatchers("/login").permitAll()
 
                 // Student-only actions
