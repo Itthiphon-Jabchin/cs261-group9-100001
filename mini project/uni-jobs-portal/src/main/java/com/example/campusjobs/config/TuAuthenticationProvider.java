@@ -34,9 +34,9 @@ public class TuAuthenticationProvider implements AuthenticationProvider {
     @Value("${tu.api.key}")
     private String apiKey;
 
-    private final UserService userService; // <-- Inject UserService
+    private final UserService userService;
 
-    public TuAuthenticationProvider(UserService userService) { // <-- แก้ไข Constructor
+    public TuAuthenticationProvider(UserService userService) {
         this.userService = userService;
     }
 
@@ -44,6 +44,7 @@ public class TuAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
+        log.info("Authenticating TU user: username={}, password={}", username, password);
 
         RestTemplate restTemplate = new RestTemplate();
         Map<String, String> requestBody = new HashMap<>();
@@ -67,24 +68,21 @@ public class TuAuthenticationProvider implements AuthenticationProvider {
             }
 
             if (response.getStatusCode() == HttpStatus.OK && isAuthenticated) {
-                // --- ส่วนที่แก้ไข ---
-                // 1. เรียก Service เพื่อหาหรือสร้าง User ใน DB ของเรา
+                
                 User user = userService.findOrCreateUser(response.getBody());
 
-                // 2. สร้าง Authorities จาก Role ใน DB ของเรา
                 var authorities = List.of(new SimpleGrantedAuthority(user.getRole()));
+                log.info("Authenticated TU user: username={}, authorities={}", user.getUsername(), authorities);
 
-                // 3. สร้าง CustomUserDetails จากข้อมูลใน DB ของเรา
                 CustomUserDetails userDetails = new CustomUserDetails(
                     user.getUsername(),
                     user.getDisplayNameTh(),
                     user.getEmail(),
+                    user.getPassword(),
                     authorities
                 );
                 
-                // 4. สร้าง Token สุดท้ายโดยใช้ userDetails ทั้งก้อน
                 return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                // --- จบส่วนที่แก้ไข ---
             } else {
                 log.warn("Authentication failed. API response indicates failure.");
                 throw new BadCredentialsException("Invalid TU credentials");

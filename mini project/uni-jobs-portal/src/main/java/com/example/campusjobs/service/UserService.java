@@ -1,10 +1,11 @@
 package com.example.campusjobs.service;
 
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
 import com.example.campusjobs.model.User;
 import com.example.campusjobs.repo.UserRepository;
-import org.springframework.stereotype.Service;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -21,11 +22,15 @@ public class UserService {
         // ค้นหาใน DB ของเราก่อน ถ้าเจอให้ return กลับไปเลย
         // ถ้าไม่เจอ ให้สร้าง User ใหม่, บันทึก, แล้วค่อย return กลับไป
         return userRepository.findByUsername(username)
-                .orElseGet(() -> {
+                .orElseGet(() -> {  
                     User newUser = new User();
                     newUser.setUsername(username);
+                    newUser.setPassword(null);
                     newUser.setDisplayNameTh(apiData.get("displayname_th").toString());
+                    newUser.setDisplayNameEn(apiData.get("displayname_en").toString());
                     newUser.setEmail(apiData.get("email").toString());
+                    newUser.setDepartment(apiData.get("department").toString());
+                    newUser.setFaculty(apiData.get("faculty").toString());
                     
                     String type = apiData.get("type").toString();
                     String role = type.equalsIgnoreCase("student") ? "ROLE_STUDENT" : "ROLE_TEACHER";

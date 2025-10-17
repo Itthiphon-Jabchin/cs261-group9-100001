@@ -10,42 +10,29 @@ public class CustomUserDetails implements UserDetails {
     private final String username;
     private final String displayNameTh;
     private final String email;
+    private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    // --- Constructor ที่ต้องมี ---
-    // ตรวจสอบว่าคุณมี Constructor นี้อยู่ และรับ parameter 4 ตัวตรงกัน
-    public CustomUserDetails(String username, String displayNameTh, String email, Collection<? extends GrantedAuthority> authorities) {
+    public CustomUserDetails(String username, String displayNameTh, String email, String password,
+                             Collection<? extends GrantedAuthority> authorities) {
         this.username = username;
         this.displayNameTh = displayNameTh;
         this.email = email;
+        this.password = password;
         this.authorities = authorities;
     }
 
-    // --- Getter สำหรับดึงข้อมูลไปใช้ ---
-    public String getDisplayNameTh() {
-        return displayNameTh;
-    }
+    public String getDisplayNameTh() { return displayNameTh; }
+    public String getEmail() { return email; }
 
-    public String getEmail() {
-        return email;
-    }
-
-    // --- เมธอดที่ต้อง implement จาก UserDetails ---
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
+    public Collection<? extends GrantedAuthority> getAuthorities() { return authorities; }
     @Override
     public String getPassword() {
-        return null;
+        return password; 
     }
-
     @Override
-    public String getUsername() {
-        return username;
-    }
-
+    public String getUsername() { return username; }
     @Override
     public boolean isAccountNonExpired() { return true; }
     @Override
