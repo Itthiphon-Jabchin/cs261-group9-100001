@@ -1,7 +1,17 @@
 package com.example.campusjobs.model;
 
-import jakarta.persistence.*;
 import java.time.Instant;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "applications")
@@ -14,12 +24,19 @@ public class Application {
 
     private String applicantUsername; // student username (email)
 
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String fullName;
+
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String studentId;
+
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String email;
+
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String phone;
 
-    @Column(length = 4000)
+    @Column(length = 4000, columnDefinition = "NVARCHAR(255)")
     private String answerText;
 
     @Enumerated(EnumType.STRING)

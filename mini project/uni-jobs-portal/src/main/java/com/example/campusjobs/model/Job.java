@@ -1,7 +1,13 @@
 package com.example.campusjobs.model;
 
-import jakarta.persistence.*;
 import java.time.Instant;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "jobs")
@@ -10,14 +16,16 @@ public class Job {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String title;
 
-    @Column(length = 4000)
+    @Column(length = 4000, columnDefinition = "NVARCHAR(255)")
     private String description;
 
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String creatorUsername; // อีเมลผู้สร้าง (อาจารย์)
 
-    @Column(length = 2000)
+    @Column(length = 2000, columnDefinition = "NVARCHAR(255)")
     private String questionPrompt;
 
     private Instant createdAt = Instant.now();
