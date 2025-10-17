@@ -1,20 +1,29 @@
 services:
   db:
-    image: postgres:15
-    container_name: uni-jobs-portal-db-1
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: db
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+      SA_PASSWORD: "MyP@ssw0rd!1234"
+      ACCEPT_EULA: "Y"
     ports:
-      - "5432:5432"
+      - "1433:1433"
     volumes:
-      - db_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
-      interval: 3s
-      timeout: 2s
-      retries: 20
+      - mssql-data:/var/opt/mssql
+
+  # รัน init.sql เพื่อสร้างตารางและข้อมูลเริ่มต้น เมื่อรัน docker-compose ขึ้นมา
+  db-init:
+    image: mcr.microsoft.com/mssql-tools
+    container_name: db-init
+    depends_on:
+      - db
+    volumes:
+      - ./db:/scripts
+    entrypoint: ["/bin/bash", "-c", "
+      echo 'Waiting for SQL Server to start...';
+      sleep 60;
+      /opt/mssql-tools/bin/sqlcmd -S db -U SA -P 'MyP@ssw0rd!1234' -i /scripts/init.sql;
+      echo 'Database initialized successfully!'
+      "]
 
   # โปรไฟล์ dev: ให้เพื่อนแก้ UI แล้วเห็นผลทันที
   app-dev:
@@ -25,13 +34,12 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME}
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://db:1433;databaseName=${DB_NAME};trustServerCertificate=true;
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       APP_SEED_ENABLED: ${APP_SEED_ENABLED}
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     volumes:
       - .:/workspace
       - m2:/root/.m2
@@ -44,14 +52,12 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME}
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://db:1433;databaseName=${DB_NAME};trustServerCertificate=true;
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       APP_SEED_ENABLED: ${APP_SEED_ENABLED}
     depends_on:
-      db:
-        condition: service_healthy
+      - db
 
 volumes:
-  db_data:
-  m2:
+  mssql-data:
