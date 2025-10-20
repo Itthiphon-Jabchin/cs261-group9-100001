@@ -174,9 +174,10 @@
         </div>
 
         <div>
-          <label>Student ID</label>
-          <input type="text" th:value="${user.username}" readonly />
+        <label th:text="${#authorization.expression('hasRole(''ADMIN'')') ? 'Admin ID' : 'Student ID'}"></label>
+        <input type="text" th:value="${user.username}" readonly />
         </div>
+
       </div>
     </div>
   </div>
