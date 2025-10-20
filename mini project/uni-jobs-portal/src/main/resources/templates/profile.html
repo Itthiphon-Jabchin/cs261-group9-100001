@@ -31,13 +31,14 @@
     }
 
     .profile-wrapper {
-      background: #fff;
-      border-radius: 15px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      width: 700px;
-      margin: 120px auto 60px auto;
-      padding: 50px 60px;
-    }
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 700px;
+  margin: 60px auto 60px auto;
+  padding: 45px 60px; 
+}
+
 
     .profile-container {
       display: flex;
@@ -78,8 +79,8 @@
       width: 100%;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      column-gap: 40px;  
-      row-gap: 28px;   
+      column-gap: 40px;
+      row-gap: 28px;
       text-align: left;
     }
 
@@ -110,16 +111,17 @@
         width: 90%;
         padding: 30px;
       }
+
       .profile-form {
         grid-template-columns: 1fr;
       }
     }
-
   </style>
 </head>
 
 <body>
 
+  <!-- Navbar -->
   <div class="navbar">
     <div class="logo">VolunteeU</div>
     <div class="nav-links">
@@ -150,7 +152,6 @@
 
   <!-- Main -->
   <div class="main-content">
-    <!-- Profile Card -->
     <div class="profile-wrapper">
       <div class="profile-container">
         <div class="profile-avatar">👤</div>
@@ -174,14 +175,16 @@
         </div>
 
         <div>
-        <label th:text="${#authorization.expression('hasRole(''ADMIN'')') ? 'Admin ID' : 'Student ID'}"></label>
-        <input type="text" th:value="${user.username}" readonly />
+          <label th:text="${
+            #authorization.expression('hasRole(''ROLE_ADMIN'')') ? 'Admin ID' :
+            (#authorization.expression('hasRole(''ROLE_TEACHER'')') ? 'Teacher ID' : 'Student ID')
+          }"></label>
+          <input type="text" th:value="${user.username}" readonly />
         </div>
 
       </div>
     </div>
   </div>
-
 
   <div class="footer">
     © 2025 VolunteeU — Software Project Recruitment
