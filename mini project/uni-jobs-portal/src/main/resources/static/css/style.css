@@ -340,20 +340,9 @@ body {
     text-align: center;
 }
 
-.status-interview {
-    background-color: #fffbeb;
-    color: #f59e0b;
-}
-
-.status-accepted {
-    background-color: #f0fdf4;
-    color: #16a34a;
-}
-
-.status-rejected {
-    background-color: #fef2f2;
-    color: #ef4444;
-}
+.status-pending { background: #fdf4e3; color: #d89b00; }
+.status-approved { background: #eaf8ee; color: #2e8b57; }
+.status-rejected { background: #fdecea; color: #c0392b; }
 
 .status-submitted {
     background-color: #f8f9fa;
@@ -673,19 +662,6 @@ body {
   align-items: center;
   gap: 12px;
 }
-
-.status-badge {
-  font-weight: 600;
-  padding: 8px 14px;
-  border-radius: 25px;
-  background-color: #fdf4e3;
-  color: #a36a00;
-}
-
-.status-pending { background: #fdf4e3; color: #d89b00; }
-.status-accepted { background: #eaf8ee; color: #2e8b57; }
-.status-rejected { background: #fdecea; color: #c0392b; }
-
 
 .application-extra {
   width: 100%;
