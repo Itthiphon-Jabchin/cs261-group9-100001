@@ -33,11 +33,7 @@ public class TuAuthenticationProvider implements AuthenticationProvider {
     private String tuApiUrl;
     @Value("${tu.api.key}")
     private String apiKey;
-    @PostConstruct
-    public void init(){
-        System.out.println("DEBUG ========== " + apiKey);
-    }
-
+    
     private final UserService userService;
 
     public TuAuthenticationProvider(UserService userService) {
