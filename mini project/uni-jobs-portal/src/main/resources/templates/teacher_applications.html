@@ -1,126 +1,107 @@
 <!DOCTYPE html>
-<html lang="th"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="th" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-  <meta charset="UTF-8">
-  <title>ผู้สมัครงาน</title>
-  <style>
-    body {
-      font-family: "Sarabun", sans-serif;
-      margin: 20px 40px;
-      background-color: #fafafa;
-    }
-    h2 {
-      color: #b22222;
-      margin-bottom: 8px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px 10px;
-      text-align: left;
-    }
-    th {
-      background-color: #f5f5f5;
-    }
-    .no-applicants {
-      margin: 15px 0;
-      padding: 12px;
-      background-color: #f9f9f9;
-      border: 1px dashed #bbb;
-      border-radius: 6px;
-      text-align: center;
-      color: #555;
-      font-style: italic;
-    }
-    .toolbar {
-      margin-bottom: 15px;
-    }
-    button {
-      background-color: #b22222;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #8b1a1a;
-    }
-    h3 {
-      margin-top: 25px;
-      color: #333;
-    }
-  </style>
+<meta charset="UTF-8">
+    <title>ผู้สมัครงาน</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-  <div class="toolbar">
-    <span>เข้าสู่ระบบโดย: <b sec:authentication="name">user</b></span>
-    |
-    <form method="post" action="/logout" th:object="${_csrf}" style="display:inline">
-      <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
-      <button type="submit" style="background:none;border:none;color:#b22222;cursor:pointer;">ออกจากระบบ</button>
-    </form>
-    | <a th:href="@{|/teacher/jobs|}" style="color:#b22222;">ย้อนกลับ</a>
+  <div class="navbar">
+    <div class="logo">VolunteeU</div>
+    <div class="nav-links">
+      <a href="/" class="active" style="font-weight: bold;">Home</a>
+
+      <th:block sec:authorize="hasRole('STUDENT')">
+        <a th:href="@{/student/applications}">ใบสมัครของฉัน</a>
+      </th:block>
+
+      <th:block sec:authorize="hasRole('TEACHER')">
+        <a th:href="@{/teacher/jobs}">พื้นที่อาจารย์</a>
+      </th:block>
+
+      <th:block sec:authorize="isAuthenticated()">
+        <a th:href="@{/profile}">Profile</a>
+
+        <form method="post" action="/logout" th:object="${_csrf}" style="display:inline; margin-left: 25px;">
+          <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
+          <button type="submit" style="background:none; border:none; color:#A3062C; cursor:pointer;">Logout</button>
+        </form>
+      </th:block>
+
+      <th:block sec:authorize="isAnonymous()">
+        <a href="/login">Login</a>
+      </th:block>
+    </div>
   </div>
 
-  <h2>ผู้สมัคร: <span th:text="${job.title}">Job</span></h2>
-  <p th:text="${job.description}">desc</p>
-  <p><b>คำถาม:</b> <span th:text="${job.questionPrompt}">question</span></p>
+  <div class="main-content">
+    <div class="application-container">
+      <h1>ผู้สมัคร: <span th:text="${job.title}">Job</span></h2>
+      <p th:text="${job.description}">desc</p>
+      <p><b>คำถาม:</b> <span th:text="${job.questionPrompt}">question</span></p>
 
-  <!-- ✅ แสดงเฉพาะข้อความถ้าไม่มีผู้สมัคร -->
-  <div th:if="${apps == null or #lists.isEmpty(apps)}" class="no-applicants">
-    ยังไม่มีผู้สมัครในขณะนี้
+      <!-- ✅ แสดงเฉพาะข้อความถ้าไม่มีผู้สมัคร -->
+      <div th:if="${apps == null or #lists.isEmpty(apps)}" class="no-applicants">
+        ยังไม่มีผู้สมัครในขณะนี้
+      </div>
+
+      <!-- ✅ แสดงตารางและรายชื่อที่ผ่านเฉพาะเมื่อมีผู้สมัคร -->
+      <div th:unless="${apps == null or #lists.isEmpty(apps)}">
+        <table>
+          <thead>
+            <tr>
+              <th>ชื่อ - นามสกุล</th>
+              <th>รหัส นศ.</th>
+              <th>อีเมล</th>
+              <th>โทร</th>
+              <th>คำตอบ</th>
+              <th>สถานะ</th>
+              <th>จัดการ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="a : ${apps}">
+              <td th:text="${a.fullName}">name</td>
+              <td th:text="${a.studentId}">sid</td>
+              <td th:text="${a.email}">email</td>
+              <td th:text="${a.phone}">phone</td>
+              <td th:text="${a.answerText}">answer</td>
+              <td th:text="${a.status}">PENDING</td>
+              <td>
+                <form method="post" th:action="@{|/teacher/applications/${a.id}/approve|}" th:object="${_csrf}"
+                  style="display:inline">
+                  <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
+                  <button type="submit">ผ่าน</button>
+                </form>
+                <form method="post" th:action="@{|/teacher/applications/${a.id}/reject|}" th:object="${_csrf}"
+                  style="display:inline">
+                  <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
+                  <button type="submit" style="background-color:#666;">ไม่ผ่าน</button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>รายชื่อที่ผ่าน</h3>
+        <ul>
+          <li th:each="a : ${apps}" th:if="${a.status.name() == 'APPROVED'}"
+            th:text="${a.fullName + ' (' + a.studentId + ')'}">pass</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    © 2025 VolunteeU — Software Project Recruitment
   </div>
 
-  <!-- ✅ แสดงตารางและรายชื่อที่ผ่านเฉพาะเมื่อมีผู้สมัคร -->
-  <div th:unless="${apps == null or #lists.isEmpty(apps)}">
-    <table>
-      <thead>
-        <tr>
-          <th>ชื่อ - นามสกุล</th>
-          <th>รหัส นศ.</th>
-          <th>อีเมล</th>
-          <th>โทร</th>
-          <th>คำตอบ</th>
-          <th>สถานะ</th>
-          <th>จัดการ</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="a : ${apps}">
-          <td th:text="${a.fullName}">name</td>
-          <td th:text="${a.studentId}">sid</td>
-          <td th:text="${a.email}">email</td>
-          <td th:text="${a.phone}">phone</td>
-          <td th:text="${a.answerText}">answer</td>
-          <td th:text="${a.status}">PENDING</td>
-          <td>
-            <form method="post" th:action="@{|/teacher/applications/${a.id}/approve|}" th:object="${_csrf}" style="display:inline">
-              <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
-              <button type="submit">ผ่าน</button>
-            </form>
-            <form method="post" th:action="@{|/teacher/applications/${a.id}/reject|}" th:object="${_csrf}" style="display:inline">
-              <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
-              <button type="submit" style="background-color:#666;">ไม่ผ่าน</button>
-            </form>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h3>รายชื่อที่ผ่าน</h3>
-    <ul>
-      <li th:each="a : ${apps}" th:if="${a.status.name() == 'APPROVED'}"
-          th:text="${a.fullName + ' (' + a.studentId + ')'}">pass</li>
-    </ul>
-  </div>
 </body>
+
 </html>
