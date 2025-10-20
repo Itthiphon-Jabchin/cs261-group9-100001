@@ -47,12 +47,12 @@
       <p th:text="${job.description}">desc</p>
       <p><b>คำถาม:</b> <span th:text="${job.questionPrompt}">question</span></p>
 
-      <!-- ✅ แสดงเฉพาะข้อความถ้าไม่มีผู้สมัคร -->
+
       <div th:if="${apps == null or #lists.isEmpty(apps)}" class="no-applicants">
         ยังไม่มีผู้สมัครในขณะนี้
       </div>
 
-      <!-- ✅ แสดงตารางและรายชื่อที่ผ่านเฉพาะเมื่อมีผู้สมัคร -->
+
       <div th:unless="${apps == null or #lists.isEmpty(apps)}">
         <table>
           <thead>
@@ -91,10 +91,33 @@
         </table>
 
         <h3>รายชื่อที่ผ่าน</h3>
-        <ul>
-          <li th:each="a : ${apps}" th:if="${a.status.name() == 'APPROVED'}"
-            th:text="${a.fullName + ' (' + a.studentId + ')'}">pass</li>
-        </ul>
+
+<div th:if="${#lists.isEmpty(approvedApplicants)}" class="no-applicants">
+  ไม่มีผู้ที่ผ่านขณะนี้
+</div>
+
+
+<table th:unless="${#lists.isEmpty(approvedApplicants)}">
+  <thead>
+    <tr>
+      <th>ชื่อ - นามสกุล</th>
+      <th>รหัส นศ.</th>
+      <th>อีเมล</th>
+      <th>โทร</th>
+      <th>คำตอบ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="a : ${approvedApplicants}">
+      <td th:text="${a.fullName}">ชื่อ</td>
+      <td th:text="${a.studentId}">รหัส</td>
+      <td th:text="${a.email}">อีเมล</td>
+      <td th:text="${a.phone}">โทร</td>
+      <td th:text="${a.answerText}">คำตอบ</td>
+    </tr>
+  </tbody>
+</table>
+
       </div>
     </div>
   </div>
