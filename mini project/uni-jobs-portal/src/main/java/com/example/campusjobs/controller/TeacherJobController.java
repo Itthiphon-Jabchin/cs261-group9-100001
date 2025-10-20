@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
-
+import java.util.stream.Collectors; 
 @Controller
 @Validated
 @RequestMapping("/teacher")
@@ -34,7 +34,9 @@ public class TeacherJobController {
     }
 
     @GetMapping("/jobs/new")
-    public String newJobForm() { return "teacher_job_new"; }
+    public String newJobForm() { 
+        return "teacher_job_new"; 
+    }
 
     @PostMapping("/jobs")
     public String createJob(@RequestParam("title") @NotBlank String title,
@@ -48,6 +50,7 @@ public class TeacherJobController {
         return "redirect:/teacher/jobs";
     }
 
+    // ✅ แก้เฉพาะตรงนี้เท่านั้น
     @GetMapping("/jobs/{id}/applications")
     public String viewApplications(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
         Optional<Job> jobOpt = jobRepository.findById(id);
@@ -55,8 +58,18 @@ public class TeacherJobController {
             ra.addFlashAttribute("err", "ไม่มีสิทธิ์เข้าถึงงานนี้");
             return "redirect:/teacher/jobs";
         }
-        model.addAttribute("job", jobOpt.get());
-        model.addAttribute("apps", applicationRepository.findByJobIdOrderByAppliedAtDesc(id));
+
+        var job = jobOpt.get();
+        var apps = applicationRepository.findByJobIdOrderByAppliedAtDesc(id);
+
+        var approvedApplicants = apps.stream()
+                .filter(a -> a.getStatus() == ApplicationStatus.APPROVED)
+                .collect(Collectors.toList());
+
+        model.addAttribute("job", job);
+        model.addAttribute("apps", apps);
+        model.addAttribute("approvedApplicants", approvedApplicants);
+
         return "teacher_applications";
     }
 
@@ -76,12 +89,14 @@ public class TeacherJobController {
             ra.addFlashAttribute("err", "ไม่พบใบสมัคร");
             return "redirect:/teacher/jobs";
         }
+
         var app = appOpt.get();
         var job = app.getJob();
         if (!job.getCreatorUsername().equals(SecUtil.currentUsername())) {
             ra.addFlashAttribute("err", "ไม่มีสิทธิ์ปรับสถานะงานนี้");
             return "redirect:/teacher/jobs";
         }
+
         app.setStatus(status);
         applicationRepository.save(app);
         ra.addFlashAttribute("msg", "อัปเดตสถานะเรียบร้อย");
