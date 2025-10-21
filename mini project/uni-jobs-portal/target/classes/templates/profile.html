@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="th"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Profile | VolunteeU</title>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <style>
+    body {
+      background-color: #fafafa;
+      font-family: 'Inria Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .main-content {
+      flex-grow: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .profile-wrapper {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 700px;
+  margin: 60px auto 60px auto;
+  padding: 45px 60px; 
+}
+
+
+    .profile-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background-color: #EEE4F3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      color: #6B2A7C;
+      margin-bottom: 15px;
+    }
+
+    .profile-email {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 35px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: #A3062C;
+      text-align: left;
+      width: 100%;
+      margin-bottom: 25px;
+    }
+
+    .profile-form {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 40px;
+      row-gap: 28px;
+      text-align: left;
+    }
+
+    .profile-form label {
+      font-weight: 700;
+      color: #444;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .profile-form input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+      color: #333;
+      background-color: #fafafa;
+    }
+
+    .profile-form input[readonly] {
+      background-color: #f9f9f9;
+      color: #666;
+    }
+
+    @media (max-width: 700px) {
+      .profile-wrapper {
+        width: 90%;
+        padding: 30px;
+      }
+
+      .profile-form {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">VolunteeU</div>
+    <div class="nav-links">
+      <a href="/" style="font-weight: bold;">Home</a>
+
+      <th:block sec:authorize="hasRole('STUDENT')">
+        <a th:href="@{/student/applications}">ใบสมัครของฉัน</a>
+      </th:block>
+
+      <th:block sec:authorize="hasRole('TEACHER')">
+        <a th:href="@{/teacher/jobs}">พื้นที่อาจารย์</a>
+      </th:block>
+
+      <th:block sec:authorize="isAuthenticated()">
+        <a th:href="@{/profile}" class="active">Profile</a>
+        <form method="post" action="/logout" th:object="${_csrf}" style="display:inline; margin-left:25px;">
+          <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
+          <button type="submit"
+                  style="background:none; border:none; color:#A3062C; cursor:pointer;">Logout</button>
+        </form>
+      </th:block>
+
+      <th:block sec:authorize="isAnonymous()">
+        <a href="/login">Login</a>
+      </th:block>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main-content">
+    <div class="profile-wrapper">
+      <div class="profile-container">
+        <div class="profile-avatar">👤</div>
+        <div class="profile-email" th:text="${user.email}">xxxxxx@dome.tu.ac.th</div>
+      </div>
+
+      <div class="section-title">Personal Detail</div>
+
+      <div class="profile-form">
+        <div>
+          <label>First Name</label>
+          <input type="text"
+                 th:value="${user.displayNameEn != null ? #strings.listSplit(user.displayNameEn, ' ')[0] : ''}" readonly />
+        </div>
+
+        <div>
+          <label>Last Name</label>
+          <input type="text"
+                 th:value="${user.displayNameEn != null ? #strings.listSplit(user.displayNameEn, ' ').size() > 1 ? #strings.listSplit(user.displayNameEn, ' ')[1] : '' : ''}"
+                 readonly />
+        </div>
+
+        <div>
+          <label th:text="${
+            #authorization.expression('hasRole(''ROLE_ADMIN'')') ? 'Admin ID' :
+            (#authorization.expression('hasRole(''ROLE_TEACHER'')') ? 'Teacher ID' : 'Student ID')
+          }"></label>
+          <input type="text" th:value="${user.username}" readonly />
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    © 2025 VolunteeU — Software Project Recruitment
+  </div>
+</body>
+</html>

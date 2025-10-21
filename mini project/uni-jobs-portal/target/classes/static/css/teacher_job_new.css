@@ -1,0 +1,120 @@
+/*-----teacher_job_new.html-----*/
+
+.main-content {
+    width: 80%;
+    margin: 0 auto;
+    background-color: var(--white);
+    border-radius: 8px;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+}
+
+.main-content h2 {
+    font-size: 2.75rem;
+    font-weight: 700;
+    margin-bottom: 4%;
+    color: #A3062C;
+}
+
+.job-name {
+    width: 100%;
+    display: flex;
+    margin-bottom: 20px;
+    flex-direction: column;
+}
+
+.job-desc {
+    width: 100%;
+    display: flex;
+    margin-bottom: 20px;
+    flex-direction: column;
+}
+
+.job-quiz {
+    width: 100%;
+    display: flex;
+    margin-bottom: 20px;
+    flex-direction: column;
+}
+
+label {
+    width: 100%;
+    display: block;
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 5px;
+    border: none;
+    border-radius: 6px;
+    background: #fff;
+}
+
+textarea {
+    height: 80px;
+    resize: none;
+}
+
+.save-btn {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+
+.job-save {
+    background-color: #A3062C;
+    color: #f7f7f7;
+    border-radius: 15px;
+    padding: 12px 24px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.job-save:hover {
+    background-color: #842029;
+}
+
+.back-btn {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+
+.job-back {
+    background-color: #fff;
+    color:black;
+    padding: 12px 24px;
+    border-radius: 15px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    text-decoration: none;
+    background-color: var(--white);
+    border: 1px solid #555;
+    border-radius: 15px;
+}
+
+.job-back:hover {
+    background-color: #777777;
+    color: #f7f7f7;
+}
+
+.savenback-btn {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+}

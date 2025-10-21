@@ -35,13 +35,15 @@ public class JobsController {
     }
 
     @PostMapping("/{id}/apply")
-public String apply(@PathVariable Long id,
-                    @RequestParam @NotBlank String fullName,
-                    @RequestParam @NotBlank String studentId,
-                    @RequestParam @NotBlank String email,
-                    @RequestParam @NotBlank String phone,
-                    @RequestParam @NotBlank String answerText,
-                    RedirectAttributes ra) {
+        public String apply(
+            @PathVariable Long id,
+            @RequestParam String fullName,
+            @RequestParam String studentId,
+            @RequestParam String email,
+            @RequestParam String phone,
+            @RequestParam String answerText,         
+            RedirectAttributes ra) 
+        {
 
     var job = jobRepository.findById(id).orElse(null);
     if (job == null) {
