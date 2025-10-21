@@ -2,14 +2,14 @@
 <html lang="th" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-<meta charset="UTF-8">
-    <title>ผู้สมัครงาน</title>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
-        rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8">
+  <title>ผู้สมัครงาน</title>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
@@ -44,81 +44,83 @@
   <div class="main-content">
     <div class="application-container">
       <h1>ผู้สมัคร: <span th:text="${job.title}">Job</span></h2>
-      <p th:text="${job.description}">desc</p>
-      <p><b>คำถาม:</b> <span th:text="${job.questionPrompt}">question</span></p>
+        <span class="close-button" style="margin-top: 70px; font-family: 'Inria Sans'; font-size: 18px;"
+          onclick="window.history.back()">&times;Back</span>
+        <p th:text="${job.description}">desc</p>
+        <p><b>คำถาม:</b> <span th:text="${job.questionPrompt}">question</span></p>
 
 
-      <div th:if="${apps == null or #lists.isEmpty(apps)}" class="no-applicants">
-        ยังไม่มีผู้สมัครในขณะนี้
-      </div>
+        <div th:if="${apps == null or #lists.isEmpty(apps)}" class="no-applicants">
+          ยังไม่มีผู้สมัครในขณะนี้
+        </div>
 
 
-      <div th:unless="${apps == null or #lists.isEmpty(apps)}">
-        <table>
-          <thead>
-            <tr>
-              <th>ชื่อ - นามสกุล</th>
-              <th>รหัส นศ.</th>
-              <th>อีเมล</th>
-              <th>โทร</th>
-              <th>คำตอบ</th>
-              <th>สถานะ</th>
-              <th>จัดการ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr th:each="a : ${apps}">
-              <td th:text="${a.fullName}">name</td>
-              <td th:text="${a.studentId}">sid</td>
-              <td th:text="${a.email}">email</td>
-              <td th:text="${a.phone}">phone</td>
-              <td th:text="${a.answerText}">answer</td>
-              <td th:text="${a.status}">PENDING</td>
-              <td>
-                <form method="post" th:action="@{|/teacher/applications/${a.id}/approve|}" th:object="${_csrf}"
-                  style="display:inline">
-                  <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
-                  <button type="submit">ผ่าน</button>
-                </form>
-                <form method="post" th:action="@{|/teacher/applications/${a.id}/reject|}" th:object="${_csrf}"
-                  style="display:inline">
-                  <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
-                  <button type="submit" style="background-color:#666;">ไม่ผ่าน</button>
-                </form>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div th:unless="${apps == null or #lists.isEmpty(apps)}">
+          <table>
+            <thead>
+              <tr>
+                <th>ชื่อ - นามสกุล</th>
+                <th>รหัส นศ.</th>
+                <th>อีเมล</th>
+                <th>โทร</th>
+                <th>คำตอบ</th>
+                <th>สถานะ</th>
+                <th>จัดการ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="a : ${apps}">
+                <td th:text="${a.fullName}">name</td>
+                <td th:text="${a.studentId}">sid</td>
+                <td th:text="${a.email}">email</td>
+                <td th:text="${a.phone}">phone</td>
+                <td th:text="${a.answerText}">answer</td>
+                <td th:text="${a.status}">PENDING</td>
+                <td>
+                  <form method="post" th:action="@{|/teacher/applications/${a.id}/approve|}" th:object="${_csrf}"
+                    style="display:inline">
+                    <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
+                    <button type="submit">ผ่าน</button>
+                  </form>
+                  <form method="post" th:action="@{|/teacher/applications/${a.id}/reject|}" th:object="${_csrf}"
+                    style="display:inline">
+                    <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
+                    <button type="submit" style="background-color:#666;">ไม่ผ่าน</button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-        <h3>รายชื่อที่ผ่าน</h3>
+          <h3>รายชื่อที่ผ่าน</h3>
 
-<div th:if="${#lists.isEmpty(approvedApplicants)}" class="no-applicants">
-  ไม่มีผู้ที่ผ่านขณะนี้
-</div>
+          <div th:if="${#lists.isEmpty(approvedApplicants)}" class="no-applicants">
+            ไม่มีผู้ที่ผ่านขณะนี้
+          </div>
 
 
-<table th:unless="${#lists.isEmpty(approvedApplicants)}">
-  <thead>
-    <tr>
-      <th>ชื่อ - นามสกุล</th>
-      <th>รหัส นศ.</th>
-      <th>อีเมล</th>
-      <th>โทร</th>
-      <th>คำตอบ</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr th:each="a : ${approvedApplicants}">
-      <td th:text="${a.fullName}">ชื่อ</td>
-      <td th:text="${a.studentId}">รหัส</td>
-      <td th:text="${a.email}">อีเมล</td>
-      <td th:text="${a.phone}">โทร</td>
-      <td th:text="${a.answerText}">คำตอบ</td>
-    </tr>
-  </tbody>
-</table>
+          <table th:unless="${#lists.isEmpty(approvedApplicants)}">
+            <thead>
+              <tr>
+                <th>ชื่อ - นามสกุล</th>
+                <th>รหัส นศ.</th>
+                <th>อีเมล</th>
+                <th>โทร</th>
+                <th>คำตอบ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="a : ${approvedApplicants}">
+                <td th:text="${a.fullName}">ชื่อ</td>
+                <td th:text="${a.studentId}">รหัส</td>
+                <td th:text="${a.email}">อีเมล</td>
+                <td th:text="${a.phone}">โทร</td>
+                <td th:text="${a.answerText}">คำตอบ</td>
+              </tr>
+            </tbody>
+          </table>
 
-      </div>
+        </div>
     </div>
   </div>
   <div class="footer">
