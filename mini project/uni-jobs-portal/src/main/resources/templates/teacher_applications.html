@@ -45,7 +45,9 @@
     <div class="application-container">
       <h1>ผู้สมัคร: <span th:text="${job.title}">Job</span></h2>
         <span class="close-button" style="margin-top: 70px; font-family: 'Inria Sans'; font-size: 18px;"
-          onclick="window.history.back()">&times;Back</span>
+          th:onclick="|window.location.href='@{/teacher/jobs}'|">
+          &times; Back
+        </span>
         <p th:text="${job.description}">desc</p>
         <p><b>คำถาม:</b> <span th:text="${job.questionPrompt}">question</span></p>
 
