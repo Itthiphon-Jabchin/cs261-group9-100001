@@ -91,6 +91,33 @@
         © 2025 VolunteeU — Software Project Recruitment
     </div>
 
-</body>
+
+    <!-- ✅ Popup -->
+    <div th:if="${popupMsg}" class="popup-overlay">
+        <div class="popup-box">
+            <div class="popup-icon-wrapper">
+                <div class="popup-icon-outer">
+                    <div class="popup-icon-inner">
+                        <div class="popup-icon-inner">
+                                <svg class="checkmark-svg" viewBox="0 0 52 52">
+                                <path d="M14 27 L22 35 L38 16" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h2 th:text="${popupMsg}">Application Submitted Successfully!</h2>
+            <p>You can track its status in Application.</p>
+            <button onclick="goHome()">OK</button>
+        </div>
+    </div>
+
+    <script>
+    function goHome() {
+        window.location.href = "/";
+    }
+    </script>
+
+    </body>
 
 </html>

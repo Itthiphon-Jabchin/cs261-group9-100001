@@ -66,8 +66,9 @@ public class JobsController {
 
     var app = new Application(job, me, fullName, studentId, email, phone, answerText);
     applicationRepository.save(app);
-    ra.addFlashAttribute("msg", "สมัครเรียบร้อย");
-    return "redirect:/jobs/" + id;
+    ra.addFlashAttribute("popupMsg", "Application Submitted Successfully!");
+    return "redirect:/";
+
 }
 
 }

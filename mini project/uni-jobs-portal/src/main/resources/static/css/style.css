@@ -821,3 +821,100 @@ td {
     margin-top: 25px;
     color: #333;
 }
+
+  
+.popup-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+.popup-box {
+    background: #fff;
+    border: 2px solid #A3062C;
+    border-radius: 10px;
+    padding: 25px;
+    width: 350px;
+    text-align: center;
+    font-family: "Inria Sans", sans-serif;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    animation: fadeIn 0.3s ease-in-out;
+}
+.popup-box h2 {
+    color: #A3062C;
+    margin-bottom: 15px;
+}
+
+.popup-box p {
+  color: rgb(119, 119, 119); /* สีเทา */
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.popup-box button {
+    background: #A3062C;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.popup-box button:hover {
+    background: #7a0520;
+}
+
+.popup-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.popup-icon-outer {
+  width: 80px;
+  height: 80px;
+  background-color: #f8d7da; /* วงกลมแดงอ่อน */
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-icon-inner {
+  width: 55px;
+  height: 55px;
+  border: solid #A3062C; 
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.popup-icon-inner  {
+  color: white;
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.checkmark-svg {
+  width: 35px;
+  height: 35px;
+}
+
+.checkmark-svg path {
+  fill: none;
+  stroke: #A3062C; /* ✅ สีแดง */
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: scale(0.9);}
+    to {opacity: 1; transform: scale(1);}
+}
