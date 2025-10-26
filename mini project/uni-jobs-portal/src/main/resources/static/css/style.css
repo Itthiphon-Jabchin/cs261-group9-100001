@@ -850,7 +850,7 @@ td {
 }
 
 .popup-box p {
-  color: rgb(119, 119, 119); /* สีเทา */
+  color: rgb(119, 119, 119); 
   margin-bottom: 20px;
   font-size: 15px;
 }
@@ -877,7 +877,7 @@ td {
 .popup-icon-outer {
   width: 80px;
   height: 80px;
-  background-color: #f8d7da; /* วงกลมแดงอ่อน */
+  background-color: #f8d7da; 
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -902,13 +902,13 @@ td {
 }
 
 .checkmark-svg {
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
 }
 
 .checkmark-svg path {
   fill: none;
-  stroke: #A3062C; /* ✅ สีแดง */
+  stroke: #A3062C; 
   stroke-width: 5;
   stroke-linecap: round;
   stroke-linejoin: round;
