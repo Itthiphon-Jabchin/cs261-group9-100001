@@ -46,7 +46,7 @@ public class TeacherJobController {
         String me = SecUtil.currentUsername();
         Job job = new Job(title, description, me, questionPrompt);
         jobRepository.save(job);
-        ra.addFlashAttribute("msg", "สร้างงานเรียบร้อย");
+        ra.addFlashAttribute("popupMsg", "Your post has been published !");
         return "redirect:/teacher/jobs";
     }
 

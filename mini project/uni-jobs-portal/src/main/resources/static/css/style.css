@@ -914,6 +914,34 @@ td {
   stroke-linejoin: round;
 }
 
+.popup-close {
+    position: absolute;
+    top: 10px; right: 15px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #333;
+    cursor: pointer;
+}
+
+.popup-icon-square {
+    width: 80px;
+    height: 80px;
+    background-color: #FFF5D4; 
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+[data-lucide] {
+  width: 50px;
+  height: 50px;
+  color: #E8A619;  
+}
+
+
 @keyframes fadeIn {
     from {opacity: 0; transform: scale(0.9);}
     to {opacity: 1; transform: scale(1);}
