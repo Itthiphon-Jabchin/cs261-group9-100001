@@ -22,7 +22,7 @@
         <a href="/" class="active" style="font-weight: bold;">Home</a>
 
         <th:block sec:authorize="hasAuthority('ROLE_STUDENT')">
-            <a th:href="@{/student/applications}">ใบสมัครของฉัน</a>
+            <a th:href="@{/student/applications}">Application</a>
         </th:block>
 
         <th:block sec:authorize="hasAuthority('ROLE_TEACHER')">
