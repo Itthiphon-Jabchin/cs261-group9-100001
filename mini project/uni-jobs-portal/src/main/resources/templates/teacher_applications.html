@@ -19,11 +19,11 @@
       <a href="/" class="active" style="font-weight: bold;">Home</a>
 
       <th:block sec:authorize="hasRole('STUDENT')">
-        <a th:href="@{/student/applications}">ใบสมัครของฉัน</a>
+        <a th:href="@{/student/applications}">Application</a>
       </th:block>
 
       <th:block sec:authorize="hasRole('TEACHER')">
-        <a th:href="@{/teacher/jobs}">พื้นที่อาจารย์</a>
+        <a th:href="@{/teacher/jobs}">Posts</a>
       </th:block>
 
       <th:block sec:authorize="isAuthenticated()">
