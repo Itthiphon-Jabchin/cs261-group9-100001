@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
@@ -28,6 +29,14 @@
 
             <th:block sec:authorize="isAuthenticated()">
                 <a th:href="@{/profile}">Profile</a>
+
+
+                      <!-- 🔔 กระดิ่งแจ้งเตือน -->
+            <a th:href="@{/notifications}" class="notification-bell">
+                <i data-lucide="bell"></i>
+                <span class="badge" th:text="${notificationCount}" 
+                th:if="${notificationCount > 0}"></span>
+            </a>
 
                 <form method="post" action="/logout" th:object="${_csrf}" style="display:inline; margin-left: 25px;">
                     <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
@@ -116,5 +125,10 @@
         });
       });
     </script>
+
+    <script>
+        lucide.createIcons();
+    </script>
+
 </body>
 </html>
