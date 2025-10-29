@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="th"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ใบสมัครของฉัน</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <div class="logo">VolunteeU</div>
+        <div class="nav-links">
+            <a href="/" style="font-weight: bold;">Home</a>
+
+            <th:block sec:authorize="hasRole('STUDENT')">
+                <a th:href="@{/student/applications}" class="active">Application</a>
+            </th:block>
+
+            <th:block sec:authorize="hasRole('TEACHER')">
+                <a th:href="@{/teacher/jobs}">Posts</a>
+            </th:block>
+
+            <th:block sec:authorize="isAuthenticated()">
+                <a th:href="@{/profile}">Profile</a>
+
+
+                      <!-- 🔔 กระดิ่งแจ้งเตือน -->
+            <a th:href="@{/notifications}" class="notification-bell">
+                <i data-lucide="bell"></i>
+                <span class="badge" th:text="${notificationCount}" 
+                th:if="${notificationCount > 0}"></span>
+            </a>
+
+                <form method="post" action="/logout" th:object="${_csrf}" style="display:inline; margin-left: 25px;">
+                    <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
+                    <button type="submit"
+                        style="background:none; border:none; color:#A3062C; cursor:pointer;">Logout</button>
+                </form>
+            </th:block>
+
+            <th:block sec:authorize="isAnonymous()">
+                <a href="/login">Login</a>
+            </th:block>
+        </div>
+    </div>
+
+
+    <div class="job-box">
+            <div class="page-header">
+                <h1>Staff งานปฐมนิเทศ</h1>
+                <div class="section-divider"></div>
+            </div>
+    <img src="event-full.png" alt="โปสเตอร์ TU92">
+
+     <div class="page-description">
+                <h1>Description</h1>
+                <div class="section-divider"></div>
+        </div>
+
+    <div class="job-description">
+      <p>รับสมัครสต๊าฟงานรับเพื่อนใหม่ TU92 ณ ยิมเนเซียม 4 และ ยิมเนเซียม 5 จัดขึ้นในวันที่ 10 สิงหาคม 2569 ผ่ายกิจกรรม , ฝ่ายพัสดุ , ฝ่ายมะเบียน , ฝ่ายสถานที่ , ฝ่าย stage & run script , ฝ่ายคมนาคม ฯลฯ</p>
+      <p>ผู้ที่มีสิทธิ์สมัคร : นักศึกษามหาวิทยาลัยธรรมศาสตร์ทุกชั้นปี (ยกเว้นรหัส 69)</p>
+    </div>
+
+    <div class="job-footer">
+            <button onclick="window.location.href='/'" class="cancel-btn">Cancel</button> 
+            <button class="apply-btn">Apply Now</button>
+    </div>
+
+    </div>
+    
+
+    <div class="footer">
+        © 2025 VolunteeU — Software Project Recruitment
+    </div>
+
+</body>
+</html>
