@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="th" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>ดูรายชื่อผู้สมัคร</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="navbar">
+    <div class="logo">VolunteeU</div>
+    <div class="nav-links">
+        <a href="/" style="font-weight: bold;">Home</a>
+        <a href="/teacher/jobs">Posts</a>
+        <a href="/teacher/applicant" class="active">Applicants</a>
+        <a href="/teacher/interview">Interview</a>
+        <a href="/teacher/final">Final</a>
+        <a href="/profile">Profile</a>
+        <form method="post" th:action="@{/logout}" th:object="${_csrf}" style="display:inline; margin-left: 25px;">
+            <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
+            <button type="submit" style="background:none;border:none;color:#A3062C;cursor:pointer;">Logout</button>
+        </form>
+    </div>
+</div>
+
+<div class="main-content">
+    <h2>Applicant</h2>
+</div>
+
+<div class="footer">
+    © 2025 VolunteeU — Software Project Recruitment
+</div>
+</body>
+</html>
