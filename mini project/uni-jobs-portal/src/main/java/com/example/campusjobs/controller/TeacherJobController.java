@@ -102,4 +102,19 @@ public class TeacherJobController {
         ra.addFlashAttribute("msg", "อัปเดตสถานะเรียบร้อย");
         return "redirect:/teacher/jobs/" + job.getId() + "/applications";
     }
+    //อันนี้เพิ่มมาให้กด link ได้เฉยๆ ยังไม่ได้ใส่ logic ใดๆ
+    @GetMapping("/applicant")
+    public String applicantsPage() {
+        return "teacher_applicant";
+    }
+
+    @GetMapping("/interview")
+    public String interviewsPage() {
+        return "teacher_interview";
+    }
+
+    @GetMapping("/final")
+    public String finalPage() {
+        return "teacher_final";
+    }
 }
