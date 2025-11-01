@@ -126,7 +126,7 @@
   <div class="navbar">
     <div class="logo">VolunteeU</div>
     <div class="nav-links">
-      <a href="/" style="font-weight: bold;">Home</a>
+      <a href="/">Home</a>
 
       <th:block sec:authorize="hasRole('STUDENT')">
         <a th:href="@{/student/applications}">Application</a>
@@ -140,7 +140,7 @@
       </th:block>
 
       <th:block sec:authorize="isAuthenticated()">
-        <a th:href="@{/profile}" class="active">Profile</a>
+        <a th:href="@{/profile}" class="active" style="font-weight: bold;" >Profile</a>
 
             <!-- 🔔 กระดิ่งแจ้งเตือน -->
             <a th:href="@{/notifications}" class="notification-bell">

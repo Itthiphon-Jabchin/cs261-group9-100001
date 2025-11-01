@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>ดูรายชื่อผู้มีสิทธิ์สัม</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <div class="navbar">
     <div class="logo">VolunteeU</div>
     <div class="nav-links">
-        <a href="/" style="font-weight: bold;">Home</a>
+        <a href="/">Home</a>
         <a href="/teacher/jobs">Posts</a>
         <a href="/teacher/applicant">Applicant</a>
-        <a href="/teacher/interview" class="active">Interview</a>
+        <a href="/teacher/interview" class="active" style="font-weight: bold;">Interview</a>
         <a href="/teacher/final">Final</a>
         <a href="/profile">Profile</a>
         <form method="post" th:action="@{/logout}" th:object="${_csrf}" style="display:inline; margin-left: 25px;">
