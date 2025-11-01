@@ -17,6 +17,9 @@
     <div class="nav-links">
       <a href="/" style="font-weight: bold;">Home</a>
       <a href="/teacher/jobs" class="active">Posts</a>
+        <a th:href="@{/teacher/applicant}">Applicant</a>
+        <a th:href="@{/teacher/interview}">Interview</a>
+        <a th:href="@{/teacher/final}">Final</a>
       <a href="/profile">Profile</a>
       <form method="post" action="/logout" th:action="@{/logout}" style="display:inline; margin-left:20px;">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />

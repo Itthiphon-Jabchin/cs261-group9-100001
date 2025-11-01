@@ -24,6 +24,9 @@
 
       <th:block sec:authorize="hasRole('TEACHER')">
         <a th:href="@{/teacher/jobs}">Posts</a>
+        <a th:href="@{/teacher/applicant}">Applicant</a>
+        <a th:href="@{/teacher/interview}">Interview</a>
+        <a th:href="@{/teacher/final}">Final</a>
       </th:block>
 
       <th:block sec:authorize="isAuthenticated()">
