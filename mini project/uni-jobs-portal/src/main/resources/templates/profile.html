@@ -130,6 +130,9 @@
 
       <th:block sec:authorize="hasRole('STUDENT')">
         <a th:href="@{/student/applications}">Application</a>
+
+
+
       </th:block>
 
       <th:block sec:authorize="hasRole('TEACHER')">
@@ -139,16 +142,19 @@
         <a th:href="@{/teacher/final}">Final</a>
       </th:block>
 
+ 
+
       <th:block sec:authorize="isAuthenticated()">
         <a th:href="@{/profile}" class="active" style="font-weight: bold;" >Profile</a>
 
-            <!-- 🔔 กระดิ่งแจ้งเตือน -->
-            <a th:href="@{/notifications}" class="notification-bell">
+                  <!-- 🔔 กระดิ่งแจ้งเตือน สำหรับ student เท่านั้น -->
+            <th:block sec:authorize="hasRole('STUDENT')">
+              <a th:href="@{/notifications}" class="notification-bell">
                 <i data-lucide="bell"></i>
                 <span class="badge" th:text="${notificationCount}" 
                 th:if="${notificationCount > 0}"></span>
-            </a>
-
+              </a>
+            </th:block>
 
         <form method="post" action="/logout" th:object="${_csrf}" style="display:inline; margin-left:25px;">
           <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
