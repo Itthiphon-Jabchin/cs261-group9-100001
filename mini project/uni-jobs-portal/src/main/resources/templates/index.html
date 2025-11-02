@@ -147,25 +147,25 @@
     </div>
 
     <script>
-    function goHome() {
-        window.location.href = "/";
-    }
+        function goHome() {
+            window.location.href = "/";
+        }
 
-    function toggleNotificationPopup(event) {
-        event.preventDefault();
-        const popup = document.getElementById('notification-box');
-        popup.classList.toggle('show');
-    }
+        function toggleNotificationPopup(event) {
+            event.preventDefault();
+            const popup = document.getElementById('notification-box');
+            popup.classList.toggle('show');
+        }
 
         //ปิด popup เมื่อคลิกข้างนอก
-        document.addEventListener('click', function(event) {
-        const popup = document.getElementById('notification-box');
-        const bell = document.querySelector('.notification-bell');
+        document.addEventListener('click', function (event) {
+            const popup = document.getElementById('notification-box');
+            const bell = document.querySelector('.notification-bell');
 
-        if (!popup.contains(event.target) && !bell.contains(event.target)) {
-        popup.classList.remove('show');
-    }
-    });
+            if (!popup.contains(event.target) && !bell.contains(event.target)) {
+                popup.classList.remove('show');
+            }
+        });
 
     </script>
 

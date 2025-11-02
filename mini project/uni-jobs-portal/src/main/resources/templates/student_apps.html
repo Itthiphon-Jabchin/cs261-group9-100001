@@ -17,10 +17,10 @@
     <div class="navbar">
         <div class="logo">VolunteeU</div>
         <div class="nav-links">
-            <a href="/" style="font-weight: bold;">Home</a>
+            <a href="/">Home</a>
 
             <th:block sec:authorize="hasRole('STUDENT')">
-                <a th:href="@{/student/applications}" class="active">Application</a>
+                <a th:href="@{/student/applications}" class="active" style="font-weight: bold;">Application</a>
             </th:block>
 
             <th:block sec:authorize="hasRole('TEACHER')">
@@ -31,12 +31,35 @@
                 <a th:href="@{/profile}">Profile</a>
 
 
-                      <!-- 🔔 กระดิ่งแจ้งเตือน -->
-            <a th:href="@{/notifications}" class="notification-bell">
-                <i data-lucide="bell"></i>
-                <span class="badge" th:text="${notificationCount}" 
-                th:if="${notificationCount > 0}"></span>
-            </a>
+                <!-- 🔔 กระดิ่งแจ้งเตือน -->
+                <div class="notification-container">
+                    <a href="#" class="notification-bell" onclick="toggleNotificationPopup(event)">
+                        <i data-lucide="bell"></i>
+                        <span class="badge" th:text="${notificationCount}"
+                              th:if="${notificationCount > 0}"></span>
+                    </a>
+                    <!-- กล่อง popup -->
+                    <div id="notification-box" class="notification-popup">
+                        <h3><strong>Notifications</strong></h3>
+                        <ul>
+                            <!-- ตัวอย่าง message ที่จะแจ้งใน noti เด่วค่อยมาแก้อีกที-->
+                            <li>Congratulations! You’ve been selected for Staff – งานรับเพื่อนใหม่ TU92 More details
+                                will be sent to your email.
+                                <div class="notif-time">14 April 2025 , 11.11</div>
+                            </li>
+                            <li>Congratulations! You’re shortlisted for Staff งานรับเพื่อนใหม่ TU92 check your email for
+                                interview details.
+                                <div class="notif-time">7 March 2025 , 12.30</div>
+                            </li>
+                            <li>Job post Staff – งานรับเพื่อนใหม่ TU92 has been updated.Please check the new details.
+                                <div class="notif-time">21 Feb 2025 , 17.25</div>
+                            </li>
+                            <li>You’ve applied for Staff – งานรับเพื่อนใหม่ TU92 successfully!
+                                <div class="notif-time">14 Feb 2025 , 07.11</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
                 <form method="post" action="/logout" th:object="${_csrf}" style="display:inline; margin-left: 25px;">
                     <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
@@ -128,6 +151,22 @@
 
     <script>
         lucide.createIcons();
+
+        function toggleNotificationPopup(event) {
+            event.preventDefault();
+            const popup = document.getElementById('notification-box');
+            popup.classList.toggle('show');
+        }
+
+        //ปิด popup เมื่อคลิกข้างนอก
+        document.addEventListener('click', function (event) {
+            const popup = document.getElementById('notification-box');
+            const bell = document.querySelector('.notification-bell');
+
+            if (!popup.contains(event.target) && !bell.contains(event.target)) {
+                popup.classList.remove('show');
+            }
+        });
     </script>
 
 </body>
