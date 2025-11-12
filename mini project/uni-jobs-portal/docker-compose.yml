@@ -21,7 +21,7 @@ services:
     entrypoint: ["/bin/bash", "-c", "
       echo 'Waiting for SQL Server to start...';
       sleep 60;
-      /opt/mssql-tools/bin/sqlcmd -S db -U SA -P 'MyP@ssw0rd!1234' -i /scripts/init.sql;
+      /opt/mssql-tools/bin/sqlcmd -S db -U sa -P 'MyP@ssw0rd!1234' -i /scripts/init.sql;
       echo 'Database initialized successfully!'
       "]
 

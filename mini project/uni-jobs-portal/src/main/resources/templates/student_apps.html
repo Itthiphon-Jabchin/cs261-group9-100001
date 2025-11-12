@@ -109,6 +109,10 @@
                                     <div class="circle">⏳</div>
                                     Pending
                                 </div>
+                                <div class="step" th:classappend="${a.status == 'INTERVIEW'} ? 'active' : ''">
+                                    <div class="circle">📋</div>
+                                    INTERVIEW
+                                </div>
                                 <div class="step" th:classappend="${a.status == 'ACCEPTED'} ? 'active' : ''">
                                     <div class="circle">✅</div>
                                     Accepted

@@ -345,6 +345,11 @@ body {
     color: #d89b00;
 }
 
+.status-interview {
+    background: #fdf4e3;
+    color: #1c91ff;
+}
+
 .status-approved {
     background: #eaf8ee;
     color: #2e8b57;
